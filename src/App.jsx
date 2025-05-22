@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./App.css";
+import gardenImage from "./assets/gardenlayout.png";
 
 function App() {
   const [icons, setIcons] = useState(() => {
@@ -34,7 +35,7 @@ function App() {
 
   return (
     <div className="container" ref={containerRef} onClick={handleImageClick}>
-      <img src="./gardenlayout.png" className="garden-image" alt="Garden Layout" />
+      <img src={gardenImage} className="garden-image" alt="Garden Layout" />
       {icons.map((icon, index) => (
         <div
           key={index}
