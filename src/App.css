@@ -1,8 +1,3 @@
-body {
-  margin: 0;
-  font-family: sans-serif;
-}
-
 .container {
   position: relative;
   width: 100%;
@@ -18,14 +13,28 @@ body {
 
 .icon {
   position: absolute;
-  width: 24px;
-  height: 24px;
-  background-color: rgba(255, 255, 255, 0.8);
-  border: 2px solid green;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
+  cursor: move;
+  user-select: none;
+  font-size: 1.5rem;
+  transform: translate(-50%, -50%);
 }
+
+.tooltip {
+  position: absolute;
+  transform: translate(-50%, -120%);
+  background-color: #fff;
+  color: #333;
+  padding: 4px 8px;
+  border-radius: 6px;
+  box-shadow: 0 0 4px rgba(0,0,0,0.2);
+  white-space: nowrap;
+  font-size: 0.8rem;
+  z-index: 10;
+}
+
+.tooltip input {
+  font-size: 0.8rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  margin

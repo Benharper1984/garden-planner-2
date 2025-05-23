@@ -8,6 +8,10 @@ function App() {
     return saved ? JSON.parse(saved) : [];
   });
   const [selectedIcon, setSelectedIcon] = useState(null);
+  const [showInput, setShowInput] = useState(false);
+  const [inputPos, setInputPos] = useState({ x: 0, y: 0 });
+  const [tempCoords, setTempCoords] = useState(null);
+  const [inputValue, setInputValue] = useState("");
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -18,10 +22,17 @@ function App() {
     const rect = containerRef.current.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
-    const label = prompt("Enter a label for this plant:");
-    if (label) {
-      setIcons([...icons, { x, y, label }]);
+    setTempCoords({ x, y });
+    setInputPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+    setInputValue("");
+    setShowInput(true);
+  };
+
+  const handleLabelSubmit = () => {
+    if (inputValue.trim() !== "") {
+      setIcons([...icons, { ...tempCoords, label: inputValue }]);
     }
+    setShowInput(false);
   };
 
   const handleDragEnd = (index, e) => {
@@ -71,6 +82,7 @@ function App() {
       </div>
       <div className="container" ref={containerRef} onClick={handleImageClick}>
         <img src={gardenImage} className="garden-image" alt="Garden Layout" />
+
         {icons.map((icon, index) => (
           <div
             key={index}
@@ -93,6 +105,24 @@ function App() {
             )}
           </div>
         ))}
+
+        {showInput && (
+          <div
+            className="tooltip"
+            style={{ position: "absolute", top: inputPos.y, left: inputPos.x }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <input
+              autoFocus
+              type="text"
+              placeholder="Enter label"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleLabelSubmit()}
+            />
+            <button onClick={handleLabelSubmit}>Add</button>
+          </div>
+        )}
       </div>
     </div>
   );
