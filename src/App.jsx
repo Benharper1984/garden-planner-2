@@ -7,6 +7,7 @@ function App() {
     const saved = localStorage.getItem("garden-icons");
     return saved ? JSON.parse(saved) : [];
   });
+  const [selectedIcon, setSelectedIcon] = useState(null);
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -33,14 +34,9 @@ function App() {
     setIcons(updatedIcons);
   };
 
-  const handleIconClick = (index, label, e) => {
+  const handleIconClick = (index, e) => {
     e.stopPropagation();
-    const input = prompt(`Label: ${label}\nType 'delete' to remove this plant.`);
-    if (input === "delete") {
-      const updatedIcons = [...icons];
-      updatedIcons.splice(index, 1);
-      setIcons(updatedIcons);
-    }
+    setSelectedIcon(index === selectedIcon ? null : index);
   };
 
   const clearAllIcons = () => {
@@ -61,6 +57,12 @@ function App() {
     URL.revokeObjectURL(url);
   };
 
+  const handleLabelChange = (index, newLabel) => {
+    const updatedIcons = [...icons];
+    updatedIcons[index].label = newLabel;
+    setIcons(updatedIcons);
+  };
+
   return (
     <div>
       <div className="toolbar">
@@ -73,13 +75,22 @@ function App() {
           <div
             key={index}
             className="icon"
-            title={icon.label}
             style={{ top: `${icon.y}%`, left: `${icon.x}%` }}
             draggable
             onDragEnd={(e) => handleDragEnd(index, e)}
-            onClick={(e) => handleIconClick(index, icon.label, e)}
+            onClick={(e) => handleIconClick(index, e)}
           >
             🌱
+            {selectedIcon === index && (
+              <div className="tooltip">
+                <input
+                  type="text"
+                  value={icon.label}
+                  onChange={(e) => handleLabelChange(index, e.target.value)}
+                  onClick={(e) => e.stopPropagation()}
+                />
+              </div>
+            )}
           </div>
         ))}
       </div>
